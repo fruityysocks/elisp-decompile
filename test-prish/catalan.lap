@@ -1,0 +1,24 @@
+byte code for catalan:
+  doc:   ...
+  args: (arg1)
+0	dup	  
+1	constant  0
+2	eq	  
+3	goto-if-nil 1
+6	constant  1
+7	return	  
+8:1	constant  binom-coeff
+9	stack-ref 1
+10	constant  2
+11	mult	  
+12	stack-ref 2
+13	call	  2
+14	constant  binom-coeff
+15	stack-ref 2
+16	constant  2
+17	mult	  
+18	stack-ref 3
+19	sub1	  
+20	call	  2
+21	diff	  
+22	return	  

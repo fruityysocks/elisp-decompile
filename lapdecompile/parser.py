@@ -166,7 +166,8 @@ class ElispParser(GenericASTBuilder):
         unary_expr_stacked  ::= unary_op
         binary_expr_stacked ::= expr STACK-ACCESS binary_op
         binary_expr_stacked ::= expr_stacked binary_op
-
+        
+        if_form ::= DUP GOTO-IF-NIL expr RETURN LABEL expr RETURN
 
         # We keep nonterminals at position 0 and 2
         if_form ::= expr GOTO-IF-NIL expr opt_come_from opt_label
@@ -423,12 +424,11 @@ class ElispParser(GenericASTBuilder):
         # each of the clauses in the cond.
         labeled_final_clause    ::= LABEL condition body come_froms
 
-        # clause          ::= body end_clause
+        clause          ::= body end_clause
 
         # cond (t *body*) compiles to no condition
         # If this is the first clause, then possibly
         # no label
-        clause          ::= opt_label body end_clause
 
         opt_come_from ::= COME_FROM?
         opt_label     ::= LABEL?

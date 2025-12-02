@@ -1,0 +1,6 @@
+byte code for simple-add:
+  args: (x y)
+0	varref	  x
+1	varref	  y
+2	plus	  
+3	return	  

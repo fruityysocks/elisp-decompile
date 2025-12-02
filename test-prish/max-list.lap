@@ -1,0 +1,25 @@
+byte code for max-list:
+  doc:   ...
+  args: (arg1)
+0	dup	  
+1	goto-if-not-nil 1
+4	constant  0
+5	return	  
+6:1	dup	  
+7	cdr	  
+8	goto-if-not-nil 2
+11	car	  
+12	return	  
+13:2	constant  max-list
+14	stack-ref 1
+15	cdr	  
+16	call	  1
+17	stack-ref 1
+18	car	  
+19	stack-ref 1
+20	gtr	  
+21	goto-if-nil 3
+24	discard	  
+25	car	  
+26	return	  
+27:3	return	  

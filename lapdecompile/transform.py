@@ -8,7 +8,7 @@ from spark_parser import (
 from lapdecompile.tok import Token
 from lapdecompile.treenode import SyntaxTree
 
-
+TRANSFORM = {}
 def emacs_key_translate(s):
     result = ""
     if s[0] == '"':
@@ -110,7 +110,7 @@ class TransformTree(GenericASTTraversal, object):
                 func(node)
             self.prune()
 
-    def n_unary_expr(self, node):
+    def n_unary_expr_neg_eql(self, node):
         binary_expr = node[0][0]
         if not (
             node[0] == "expr" and binary_expr in ("binary_expr", "binary_expr_stacked")
@@ -259,14 +259,12 @@ class TransformTree(GenericASTTraversal, object):
                     SyntaxTree("opt_label", []),
                 ],
             )
-            body = SyntaxTree(
-                "body",
-                SyntaxTree(
-                    "exprs", SyntaxTree("expr_stmt", SyntaxTree("expr", if_form[2]))
-                ),
-            )
+            inner_expr = SyntaxTree("expr", [if_form[2]], transformed_by="n_" + node.kind)
+            exprs_node = SyntaxTree("exprs", [inner_expr], transformed_by="n_" + node.kind)
+            body_node = SyntaxTree("body", [exprs_node], transformed_by="n_" + node.kind)
+
             node = SyntaxTree(
-                "clause", [condition, body, end_clause], transformed_by="n_" + node.kind
+                "clause", [condition, body_node, end_clause], transformed_by="n_" + node.kind
             )
         return node
 
@@ -275,15 +273,20 @@ class TransformTree(GenericASTTraversal, object):
         assert expr == "expr"
         expr_first = expr[0]
         if expr_first == "and_form" and len(expr_first) == 5:
-            # An expr_stmt with an "and" form of two items is
-            # nore naturally expressed as an "if".
-            if_form = SyntaxTree(
-                "if_form", expr_first.data, transformed_by="n_" + node.kind
-            )
-            expr = SyntaxTree("expr", [if_form], transformed_by="n_" + node.kind)
-            node = SyntaxTree("expr_stmt", expr, transformed_by="n_" + node.kind)
-            pass
+            # Expect and_form structure like: ["and_form", cond, GOTO-IF-NIL, cond2, ...]
+            # Use explicit indexing to gather the original child objects
+            # (depends on how your parser stores `.data` — adapt as needed)
+
+            # If the parser stores parts as items 1..n:
+            parts = list(expr_first)  # shallow copy of children
+            # Build a proper if_form with children as a list
+            if_form = SyntaxTree("if_form", parts, transformed_by="n_" + node.kind)
+
+            # Wrap if_form into expr, then expr_stmt, ensuring lists for children
+            expr_wrapped = SyntaxTree("expr", [if_form], transformed_by="n_" + node.kind)
+            node = SyntaxTree("expr_stmt", [expr_wrapped], transformed_by="n_" + node.kind)
         return node
+
 
     def n_let_form_star(self, let_form_star):
         assert len(let_form_star) >= 2
@@ -367,10 +370,66 @@ class TransformTree(GenericASTTraversal, object):
         body = node[2]
         assert body == "body"
         if len(body[0]) == 1:
-            # A when with only one entry is better expressed as "if"
             node = SyntaxTree(
                 "if_form", [node[0], node[1], node[2]], transformed_by="n_" + node.kind
             )
+        return node
+
+    def n_if_form(self, node):
+        # Check if this is an if_form with a cond_form that should be an if-else
+        # Pattern: if_form with 5 children where child[2] is a cond_form with 2 clauses
+        # both starting with (t ...)
+        if len(node) == 5 and node[2] == "expr":
+            then_expr = node[2][0]
+            if then_expr == "cond_form" and len(then_expr) == 2:
+                # Check if it's a clause + labeled_clauses structure
+                first_clause = then_expr[0]
+                labeled_clauses = then_expr[1]
+
+                # Check if both clauses are (t ...) style (unconditional)
+                # This indicates it's really an if-else, not a cond
+                if (first_clause == "clause" and
+                    labeled_clauses == "labeled_clauses"):
+                    # Extract the bodies from both clauses
+                    # First clause structure: clause -> [body, end_clause]
+                    # Labeled clause structure: labeled_clauses -> labeled_clause -> [LABEL, clause]
+                    if (len(first_clause) >= 2 and
+                        first_clause[0] == "body"):
+                        # This looks like an if-else pattern
+                        # Get the second clause from labeled_clauses
+                        if labeled_clauses[0] == "labeled_clause":
+                            labeled_clause = labeled_clauses[0]
+                            if len(labeled_clause) >= 2 and labeled_clause[1] == "clause":
+                                second_clause = labeled_clause[1]
+                                if len(second_clause) >= 2 and second_clause[0] == "body":
+                                    # Transform to if_else_form
+                                    # if_else_form structure from semantic_consts.py line 54:
+                                    # if_else_form ::= expr GOTO-IF-NIL expr GOTO come_froms LABEL expr opt_come_from opt_label
+                                    # We need to construct: condition, goto-if-nil, then-expr, ..., else-expr
+                                    # But our current structure is simpler, so let's create a custom structure
+                                    # that the semantics can handle
+
+                                    # For now, just extract the body expressions
+                                    then_body = first_clause[0]  # body node
+                                    else_body = second_clause[0]  # body node
+
+                                    # Create an if_else_form-like structure
+                                    # We'll use indices that match the semantic_consts.py template:
+                                    # "if_else_form": ( "%(if %c\n%+%+%|%c\n%_%|%c)%_", 0, 2, 6 )
+                                    # So we need: [condition, ..., then-expr, ..., ..., ..., else-expr]
+                                    node = SyntaxTree(
+                                        "if_else_form",
+                                        [
+                                            node[0],  # condition (index 0)
+                                            node[1],  # GOTO-IF-NIL (index 1)
+                                            then_body,  # then body (index 2)
+                                            SyntaxTree("opt_come_from", []),  # index 3
+                                            SyntaxTree("opt_label", []),  # index 4
+                                            SyntaxTree("opt_come_from", []),  # index 5
+                                            else_body,  # else body (index 6)
+                                        ],
+                                        transformed_by="n_" + node.kind,
+                                    )
         return node
 
     def traverse(self, node):

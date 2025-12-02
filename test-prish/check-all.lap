@@ -1,0 +1,23 @@
+byte code for check-all:
+  doc:   ...
+  args: (arg1 arg2)
+0	dup	  
+1	goto-if-not-nil 1
+4	constant  nil
+5	return	  
+6:1	constant  mygcd
+7	stack-ref 2
+8	stack-ref 2
+9	car	  
+10	call	  2
+11	constant  1
+12	eq	  
+13	goto-if-nil 2
+16	constant  check-all
+17	stack-ref 2
+18	stack-ref 2
+19	cdr	  
+20	call	  2
+21	return	  
+22:2	constant  t
+23	return	  

@@ -1,0 +1,11 @@
+byte code for simple-if:
+  doc:   ...
+  args: (arg1)
+0	dup	  
+1	constant  0
+2	gtr	  
+3	goto-if-nil 1
+6	constant  true
+7	return	  
+8:1	constant  false
+9	return	  

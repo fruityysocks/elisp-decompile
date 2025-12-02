@@ -1,0 +1,16 @@
+byte code for fact:
+  doc:   ...
+  args: (arg1)
+0	dup	  
+1	constant  1
+2	leq	  
+3	goto-if-nil 1
+6	constant  1
+7	return	  
+8:1	dup	  
+9	constant  fact
+10	stack-ref 2
+11	sub1	  
+12	call	  1
+13	mult	  
+14	return	  

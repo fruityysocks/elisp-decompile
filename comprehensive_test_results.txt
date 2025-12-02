@@ -1,0 +1,2254 @@
+================================================================================
+DETAILED TEST RESULTS
+================================================================================
+
+
+================================================================================
+FILE: lap/binary-op-list.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 99.4%
+Output:
+(defun test-binary-op-list(a b c d e l1 l2 l3)
+"  Test that we handle and transform list-like binary ops"
+  (+ (min b c d e) (max a b c) (max a b))
+  (nconc l1 l2 l3))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 82.3%
+Output:
+CFG-based approach failed: 
+Falling back to grammar-based parser...
+(defun test-binary-op-list(a b c d e l1 l2 l3)
+"  Test that we handle and transform list-like binary ops"
+  (+ (min b c d e) (max a b c) (max a b))
+  (nconc l1 l2 l3))
+
+
+================================================================================
+FILE: lap/divide-boom.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 100.0%
+Output:
+(defun divide-boom(a b c)
+  "A canonical example where decompilation is desireable.
+Is it the first divide or second that causes an error?"
+  (/ a (/ b c)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 100.0%
+Output:
+(defun divide-boom(a b c)
+  "A canonical example where decompilation is desireable.
+Is it the first divide or second that causes an error?"
+  (/ a (/ b c)))
+
+
+================================================================================
+FILE: lap/dotemacs5.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 98.6%
+Output:
+(defun test-dotemacs5()  
+  (dolist
+      (pair '((calendar-latitude 40.7)))
+      (set (car pair) (cadr pair))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 91.6%
+Output:
+(defun test-dotemacs5()  
+  (dolist
+      (pair '((calendar-latitude 40.7)))
+      
+      car
+      (cadr pair)))
+
+
+================================================================================
+FILE: lap/fib.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 79.7%
+Output:
+(defun fib(n)  
+  (if (<= n 1)
+          1
+        (+ (fib (1- n)) (fib (- n 2)))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 79.7%
+Output:
+(defun fib(n)  
+  (if (<= n 1)
+          1
+        (+ (fib (1- n)) (fib (- n 2)))))
+
+
+================================================================================
+FILE: lap/gcd.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 37.0%
+Output:
+(defun my-gcd(a b)
+"  Greatest Common Divisor of A and B"
+  
+  (cond 
+        (t 
+           (if (> a b)
+               (let (
+                     (c a))
+                   (setq a b)
+                   (setq b c)))
+           (if (< a 0)
+               nil))
+        ((or (= (- b a) 0) (= a 1)) a)
+        
+        (t (my-gcd (- b a) a))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 34.1%
+Output:
+(defun my-gcd(a b)
+"  Greatest Common Divisor of A and B"
+  
+  (cond 
+        ((> a b) a
+            (setq a b)
+            (setq b c))
+        ((< a 0) nil)
+        ((- b a) 
+            (if a
+                    a
+                  (my-gcd (- b a) a)))
+                (t a)))
+
+
+================================================================================
+FILE: lap/test-add-minor-mode.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 89.5%
+Output:
+(defun test-add-minor-mode()
+  (add-minor-mode 'foo nil (and (boundp 'foo-map) foo-map) nil nil))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 70.4%
+Output:
+(defun test-add-minor-mode()  
+  (if 'add-minor-mode
+          foo-map
+        nil
+        nil
+        ))
+
+
+================================================================================
+FILE: lap/test-and.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 85.2%
+Output:
+(defun test-and(a b)  
+  (if (= (- b a) 0)
+      (= a 1)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 69.6%
+Output:
+(defun test-and(a b)  
+  (if (- b a)
+      a
+      1
+      =))
+
+
+================================================================================
+FILE: lap/test-binops.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 67.4%
+Output:
+(defun binops(e)
+  (foo a b c)
+  (bar a b)
+  (require 'ert)
+  'package-initialize
+  (setq a 1)
+  (setq b 'foo)
+  (setq c "bar")
+  (setq e1 (- e 2))
+  (setq f (>= e 2))
+  (setq g (> e 2))
+  (setq h (< e 2))
+  (setq i (<= e 2))
+  (setq j (% e 2))
+  (setq k (= e 2))
+  (setq l (+ e 2))
+  (setq m (/ e 2))
+  (setq n (* e 2))
+  (setq o (equal a b)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 63.2%
+Output:
+CFG-based approach failed: 
+Falling back to grammar-based parser...
+(defun binops(e)
+  (foo a b c)
+  (bar a b)
+  (require 'ert)
+  'package-initialize
+  (setq a 1)
+  (setq b 'foo)
+  (setq c "bar")
+  (setq e1 (- e 2))
+  (setq f (>= e 2))
+  (setq g (> e 2))
+  (setq h (< e 2))
+  (setq i (<= e 2))
+  (setq j (% e 2))
+  (setq k (= e 2))
+  (setq l (+ e 2))
+  (setq m (/ e 2))
+  (setq n (* e 2))
+  (setq o (equal a b)))
+
+
+================================================================================
+FILE: lap/test-cond.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 57.5%
+Output:
+(defun test-cond(mode)  
+  (if (eq mode 'eshell)
+      (cond 
+            (t 5)
+            (t 
+               (if (eq mode 'comint)
+                   6))
+            ((eq mode 'foo) 10)))
+  (setq b 10))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 19.4%
+Output:
+(defun test-cond(mode)  
+  (cond 
+        ((eq mode 'eshell) 
+            (if 5
+                    (cond 
+                          ((eq mode 'comint) 
+                              (if 6
+                                      (if (eq mode 'foo)
+                                              10
+                                            (setq b 10))
+                                          (setq b 10)))
+                                          ((eq mode 'foo) 10)
+                                          (t 
+                                              (setq b t)))
+                                    (setq b 10)))
+                                  ((eq mode 'comint) 6)
+                                  ((eq mode 'foo) 10)
+                                  (t 
+                                      (setq b t))))
+
+
+================================================================================
+FILE: lap/test-cond3.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 61.6%
+Output:
+(defun test-cond3(a b c)  
+  (if a
+      (cond 
+            (t 2)
+            (t 
+               (if b
+                   4))
+            
+            (t 
+               (if (not c)
+                   a)))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 88.3%
+Output:
+(defun test-cond3(a b c)  
+  (cond 
+        (a 2)
+        (b 4)
+        ((not c) a)
+        (t nil)))
+
+
+================================================================================
+FILE: lap/test-cond4.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 76.6%
+Output:
+(defun test-cond4(mode)  
+  (if (eq mode 'eshell)
+          1
+        (if (eq mode 'comint)
+              2)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 89.5%
+Output:
+(defun test-cond4(mode)  
+  (cond 
+        ((eq mode 'eshell) 1)
+        ((eq mode 'comint) 2)
+        (t nil)))
+
+
+================================================================================
+FILE: lap/test-def-var-const.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 40.8%
+Output:
+(defun test-def-var-const()
+  ((lambda (def-tmp-var) (defvar first-var def-tmp-var "this is a docstring")) t)
+  ((lambda (def-tmp-var) (defvar second-var def-tmp-var)) "init value")
+  ((lambda (def-tmp-var) (defconst first-const def-tmp-var "first-const docstring")) nil)
+  ((lambda (def-tmp-var) (defconst second-const def-tmp-var)) 5))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 40.8%
+Output:
+(defun test-def-var-const()
+  ((lambda (def-tmp-var) (defvar first-var def-tmp-var "this is a docstring")) t)
+  ((lambda (def-tmp-var) (defvar second-var def-tmp-var)) "init value")
+  ((lambda (def-tmp-var) (defconst first-const def-tmp-var "first-const docstring")) nil)
+  ((lambda (def-tmp-var) (defconst second-const def-tmp-var)) 5))
+
+
+================================================================================
+FILE: lap/test-dolist.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 62.3%
+Output:
+(defun test-dolist()  
+  (dolist
+      (i '(1 2 3))
+      (princ i)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 62.3%
+Output:
+(defun test-dolist()  
+  (dolist
+      (i '(1 2 3))
+      (princ i)))
+
+
+================================================================================
+FILE: lap/test-dolist2.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 86.4%
+Output:
+(defun test-dolist2(a b)  
+  (let ((a (or (pop args) 0)))
+      (dolist
+          (b args)
+          (setq b (% a 
+                  (setq a b))))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 5.5%
+Output:
+(defun test-dolist2(a b)  
+  (cond 
+        (args 0)
+        (0 
+            (cond 
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)
+                  (
+                  (setq b (car --dolist-tail--)) nil)))
+        (t nil)))
+
+
+================================================================================
+FILE: lap/test-dolist3.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 90.7%
+Output:
+(defun test-dolist3()  
+  (dolist
+      (dir (list (expand-file-name "~/elisp") (expand-file-name "~/.emacs.d/lisp") "/usr/local/share/emacs/site-lisp" "/usr/share/emacs/site-lisp/git" ))
+      (if (file-directory-p (expand-file-name dir))
+          (add-to-list 'load-path (expand-file-name dir))))
+  (put 'set-goal-column 'disabled nil))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 82.8%
+Output:
+CFG-based approach failed: 
+Falling back to grammar-based parser...
+(defun test-dolist3()  
+  (dolist
+      (dir (list (expand-file-name "~/elisp") (expand-file-name "~/.emacs.d/lisp") "/usr/local/share/emacs/site-lisp" "/usr/share/emacs/site-lisp/git" ))
+      (if (file-directory-p (expand-file-name dir))
+          (add-to-list 'load-path (expand-file-name dir))))
+  (put 'set-goal-column 'disabled nil))
+
+
+================================================================================
+FILE: lap/test-dotemacs.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 10.1%
+Output:
+(defun test-dotemacs()
+  (global-set-key "" 'backward-delete-char-untabify)
+  (global-set-key "" 'advertised-undo)
+  (global-set-key "" 'delete-char)
+  (global-set-key "m" 'vm-mail)
+  (global-set-key "" 'isearch-forward-regexp)
+  (global-set-key "" 'isearch-backward-regexp)
+  (global-set-key '[134217747] 'isearch-forward)
+  (global-set-key '[134217746] 'isearch-backward)
+  (tool-bar-mode nil)
+  'auto-compression-mode
+  (dolist
+      (dir (list (expand-file-name "~/elisp") (expand-file-name "~/.emacs.d/lisp") "/usr/local/share/emacs/site-lisp" "/usr/share/emacs/site-lisp/git" ))
+      (if (file-directory-p (expand-file-name dir))
+          (add-to-list 'load-path (expand-file-name dir)))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 12.2%
+Output:
+(defun test-dotemacs()  
+  (dolist
+      (dir )
+      (file-directory-p (expand-file-name dir))))
+
+
+================================================================================
+FILE: lap/test-dotemacs6.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 57.1%
+Output:
+(defun test-dotemacs6()  
+  (if (fboundp 'global-font-lock-mode)
+      (global-font-lock-mode t))
+  (define-key esc-map "h" 'help-for-help)
+  (define-key esc-map "g" 'goto-line)
+  (setq Info-directory-list (list "/usr/local/lib/info/" "/usr/local/info/" "/usr/share/info/" (expand-file-name "~/info") )))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 18.3%
+Output:
+CFG-based approach failed: 
+Falling back to grammar-based parser...
+(defun test-dotemacs6()  
+  (if (fboundp 'global-font-lock-mode)
+      (global-font-lock-mode t))
+  (define-key esc-map "h" 'help-for-help)
+  (define-key esc-map "g" 'goto-line)
+  (setq Info-directory-list (list "/usr/local/lib/info/" "/usr/local/info/" "/usr/share/info/" (expand-file-name "~/info") )))
+
+
+================================================================================
+FILE: lap/test-if-else-progn.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 85.0%
+Output:
+(defun test-if-else-progn(&optional e)  
+  (if e
+          (setq a 1)
+          (setq b 2)
+            (setq a 2)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 78.4%
+Output:
+(defun test-if-else-progn(&optional e)  
+  (if e
+          (setq a 1)
+          2
+          (setq b 2)
+        2
+        (setq a 2)))
+
+
+================================================================================
+FILE: lap/test-if-else.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 74.5%
+Output:
+(defun test-if-else(&optional e)
+  e
+  (cond 
+        (t 
+           (setq a 1))
+        (t 
+           (setq a 2))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 83.1%
+Output:
+(defun test-if-else(&optional e)  
+  (if e
+          1
+          (setq a 1)
+        2
+        (setq a 2)))
+
+
+================================================================================
+FILE: lap/test-if.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 100.0%
+Output:
+(defun test-if()  
+  (if (<= e 4)
+      (setq e 10)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 91.9%
+Output:
+(defun test-if()  
+  (if (<= e 4)
+      10
+      (setq e 10)))
+
+
+================================================================================
+FILE: lap/test-if2.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 93.9%
+Output:
+(defun test-if2(e &optional f)
+  (interactive "nnumber: ")
+  
+  (if (<= e 4)
+      (setq e 10))
+  (and (not f) 
+      (setq f 3)))
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 77.7%
+Output:
+(defun test-if2(e &optional f)
+  (interactive "nnumber: ")
+  
+  (cond 
+        ((<= e 4) 
+            (setq e 10))
+        ((not f) 3
+            (setq f 3))
+        (t nil)))
+
+================================================================================
+FILE: lap/test-if3.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 64.6%
+Output:
+(defun test-if-else3(string &optional multiple)
+"  Another if and if/else test"
+  
+  (if (> (length string) 0)
+      (string= string "\n"))
+  (and (> (length string) 0) 
+      (let (
+            (s string))
+          (if (string= string "\n")
+                  "foo"
+                string))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 33.0%
+Output:
+(defun test-if-else3(string &optional multiple)
+"  Another if and if/else test"
+  
+  (cond 
+        (string string=
+            string
+            "\n")
+        (string 
+            (if string
+                    (if "foo"
+                        string)
+                  string))
+                (t nil)))
+
+
+================================================================================
+FILE: lap/test-keybinding.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 44.0%
+Output:
+
+(define-key esc-map "" 'help-for-help)
+(global-set-key "" 'backward-delete-char-untabify)
+(global-set-key "m" 'vm-mail)
+(local-set-key '[134217761] 'isearch-forward)
+(local-set-key '[134217854] 'isearch-forward)
+(global-set-key '[134217728] 'C-m-at)
+(global-set-key '[134217729] 'C-M-a)
+(global-set-key '[134217730] 'C-M-b)
+(local-set-key '[134217759] 'C-M-_)
+(local-set-key '[C-M-down] 'C-M-down)
+(local-set-key '[134217820] 'M-backspace)
+(local-set-key '[134217822] 'M-caret)
+(local-set-key '[27 right] 'ESC-right)
+(local-set-key '[134217843 27] 'M-s-ESC)
+(local-set-key '[134217824] 'M-backtick)
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 45.2%
+Output:
+CFG-based approach failed: 
+Falling back to grammar-based parser...
+
+(define-key esc-map "" 'help-for-help)
+(global-set-key "" 'backward-delete-char-untabify)
+(global-set-key "m" 'vm-mail)
+(local-set-key '[134217761] 'isearch-forward)
+(local-set-key '[134217854] 'isearch-forward)
+(global-set-key '[134217728] 'C-m-at)
+(global-set-key '[134217729] 'C-M-a)
+(global-set-key '[134217730] 'C-M-b)
+(local-set-key '[134217759] 'C-M-_)
+(local-set-key '[C-M-down] 'C-M-down)
+(local-set-key '[134217820] 'M-backspace)
+(local-set-key '[134217822] 'M-caret)
+(local-set-key '[27 right] 'ESC-right)
+(local-set-key '[134217843 27] 'M-s-ESC)
+(local-set-key '[134217824] 'M-backtick)
+
+
+================================================================================
+FILE: lap/test-let-if.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 83.3%
+Output:
+(defun test-let-if(string &optional multiple)
+  string
+  (let (
+        (s string))
+      (if (stringp string)
+              (substring s 0 -1)
+            s)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 74.0%
+Output:
+(defun test-let-if(string &optional multiple)  
+  (if string
+          (if s
+              s)
+        s))
+
+
+================================================================================
+FILE: lap/test-nullary-ops.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 86.2%
+Output:
+(defun test-nullary-ops(e)
+"  Test some nullary operators"
+  (add (point) (point-min) (point-max) (following-char) (preceding-char) (current-column) (eolp) (bolp) (current-buffer))
+  (widen))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 84.0%
+Output:
+(defun test-nullary-ops(e)
+"  Test some nullary operators"
+  
+  'add
+  point
+  point-min
+  point-max
+  following-char
+  preceding-char
+  current-column
+  eolp
+  bolp
+  current-buffer
+  widen)
+
+
+================================================================================
+FILE: lap/test-or1.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 98.2%
+Output:
+(defun test-or1(object buffer)
+  "Print disassembled code for OBJECT in (optional) BUFFER.
+BLAH BLAH BLAH"  
+  (if (or interactive-p (not buffer))
+      (insert "foo")))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 64.3%
+Output:
+(defun test-or1(object buffer)
+  "Print disassembled code for OBJECT in (optional) BUFFER.
+BLAH BLAH BLAH"  
+  (if interactive-p
+          (if (not buffer)
+              "foo"
+              insert)
+        "foo"
+        insert))
+
+
+================================================================================
+FILE: lap/test-pop.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 98.8%
+Output:
+(defun test-pop(&rest args)
+  (pop args))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 67.3%
+Output:
+(defun test-pop(&rest args)
+  args
+  (setq args (cdr args))
+  car-safe)
+
+
+================================================================================
+FILE: lap/test-save-buffer.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 97.9%
+Output:
+(defun test-save-buffer()  
+  (save-current-buffer
+      (insert "foo")))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 69.0%
+Output:
+(defun test-save-buffer()  
+  "foo"
+  insert)
+
+
+================================================================================
+FILE: lap/test-setq-default.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 66.3%
+Output:
+(defun test-setq-default()
+  (set-default 'cygwin-root (getenv "CYGWIN_ROOT"))
+  (set-default 'exec-path (cons (concat cygwin-root "/bin" ) exec-path))
+  (set-default 'process-coding-system-alist '(("bash" . undecided-unix)))
+  (set-default 'shell-file-name "bash")
+  (set-default 'explicit-shell-file-name shell-file-name))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 1
+Similarity: 0.0%
+Error:
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 235, in <module>
+    main()
+    ~~~~^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 230, in main
+    sys.exit(deparse(lap_filename, sys.stdout, show_assembly=assembly,
+             ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     write_cfg=graphs,
+                     ^^^^^^^^^^^^^^^^^
+                     show_grammar=grammar, show_tree=tree, use_cfg=use_cfg))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 186, in deparse
+    result = formatter.traverse(ast, indent)
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 255, in traverse
+    self.preorder(node)
+    ~~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 112, in preorder
+    self.default(node)
+    ~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 678, in default
+    self.template_engine(TABLE_DIRECT[key.kind], node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 638, in template_engine
+    self.preorder(subnode)
+    ~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 110, in preorder
+    func(node)
+    ~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 444, in n_expr_stmt
+    self.template_engine(("%c", 0), node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 548, in template_engine
+    self.preorder(node[index])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 110, in preorder
+    func(node)
+    ~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 408, in n_call_expr1
+    self.template_engine(("(%p%Q %l%P)", 0, 0, (1, args + 1), 1), node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 614, in template_engine
+    self.preorder(subnode)
+    ~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 112, in preorder
+    self.default(node)
+    ~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 678, in default
+    self.template_engine(TABLE_DIRECT[key.kind], node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 536, in template_engine
+    assert node[index[0]] == index[1], (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: at binary_expr[1], expected binary_op node; got name_expr
+
+
+================================================================================
+FILE: lap/test-string-fns.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 100.0%
+Output:
+(defun test-string-fns(s)
+  (elt '(1560 1561 1562) (length s))
+  (string= s "one two three")
+  (substring s 0 2))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 76.9%
+Output:
+(defun test-string-fns(s)
+  elt
+  string=
+  '(1560 1561 1562)
+  s
+  length
+  s
+  "one two three"
+  s
+  0
+  2
+  substring)
+
+
+================================================================================
+FILE: lap/test-substring.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 95.4%
+Output:
+(defun test-substring(string s)
+"  Test string= and substring. We should transform to two-arg substring when possible"
+  
+  (if (string= (substring s -1) "\n")
+          (substring s 0 -1)
+        s))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 76.7%
+Output:
+(defun test-substring(string s)
+"  Test string= and substring. We should transform to two-arg substring when possible"
+  
+  (if s
+          s
+          0
+          -1
+          substring
+        s))
+
+
+================================================================================
+FILE: lap/test-unary-ops.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 97.4%
+Output:
+(defun unary-ops(e)
+"  Test some unary operators"
+  (1+ e)
+  (car e)
+  (cdr e)
+  (integerp e))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 93.2%
+Output:
+(defun unary-ops(e)
+"  Test some unary operators"
+  (1+ e)
+  (car e)
+  (cdr e)
+  e
+  integerp)
+
+
+================================================================================
+FILE: lap/test-when-nested.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 59.9%
+Output:
+(defun test-when-nested()
+"  Excerpted from my .emacs file"
+  (require 'ert)
+  (setq debug-on-error 
+      (setq inhibit-local-variables t))
+      ((lambda (def-tmp-var) (defvar font-loaded def-tmp-var)) nil)
+      (if window-system
+          (when (not font-loaded)
+              (tool-bar-mode nil)
+              (when (font-info "DejaVu Sans Mono-10")
+                  (set-frame-font "DejaVu Sans Mono-10")
+                  ((lambda (def-tmp-var) (defconst fixed-font def-tmp-var "Font to use as the fixed font")) "DejaVu Sans Mono-11")
+                  ((lambda (def-tmp-var) (defconst variable-font def-tmp-var "Font to use as the proportional-space font")) "DejaVu Sans 10"))
+              (set-fontset-font (frame-parameter nil 'font) 'han '("cwTeXHeiBold" . "unicode-bmp"))
+              (setq font-loaded t))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 53.9%
+Output:
+CFG-based approach failed: 
+Falling back to grammar-based parser...
+(defun test-when-nested()
+"  Excerpted from my .emacs file"
+  (require 'ert)
+  (setq debug-on-error 
+      (setq inhibit-local-variables t))
+      ((lambda (def-tmp-var) (defvar font-loaded def-tmp-var)) nil)
+      (if window-system
+          (when (not font-loaded)
+              (tool-bar-mode nil)
+              (when (font-info "DejaVu Sans Mono-10")
+                  (set-frame-font "DejaVu Sans Mono-10")
+                  ((lambda (def-tmp-var) (defconst fixed-font def-tmp-var "Font to use as the fixed font")) "DejaVu Sans Mono-11")
+                  ((lambda (def-tmp-var) (defconst variable-font def-tmp-var "Font to use as the proportional-space font")) "DejaVu Sans 10"))
+              (set-fontset-font (frame-parameter nil 'font) 'han '("cwTeXHeiBold" . "unicode-bmp"))
+              (setq font-loaded t))))
+
+
+================================================================================
+FILE: lap/test-when.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 62.6%
+Output:
+(defun test-when()  
+  (when (font-info "DejaVu Sans Mono-11")
+      (set-frame-font "DejaVu Sans Mono-11")
+      ((lambda (def-tmp-var) (defconst fixed-font def-tmp-var "Font to use as the fixed font")) "DejaVu Sans Mono-11")
+      ((lambda (def-tmp-var) (defconst variable-font def-tmp-var "Font to use as the proportional-space font")) "DejaVu Sans 10"))
+  (set-fontset-font (frame-parameter nil 'font) 'han '("cwTeXHeiBold" . "unicode-bmp"))
+  (setq font-loaded t))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 55.2%
+Output:
+CFG-based approach failed: 
+Falling back to grammar-based parser...
+(defun test-when()  
+  (when (font-info "DejaVu Sans Mono-11")
+      (set-frame-font "DejaVu Sans Mono-11")
+      ((lambda (def-tmp-var) (defconst fixed-font def-tmp-var "Font to use as the fixed font")) "DejaVu Sans Mono-11")
+      ((lambda (def-tmp-var) (defconst variable-font def-tmp-var "Font to use as the proportional-space font")) "DejaVu Sans 10"))
+  (set-fontset-font (frame-parameter nil 'font) 'han '("cwTeXHeiBold" . "unicode-bmp"))
+  (setq font-loaded t))
+
+
+================================================================================
+FILE: lap/test-while.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 98.0%
+Output:
+(defun test-while(a)  
+  (while a
+      (setq x 1)))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 72.3%
+Output:
+(defun test-while(a)  
+  (if a
+      (while 
+      (setq x 1)
+          (setq x 1))))
+
+
+================================================================================
+FILE: lap/test-while2.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 44.6%
+Output:
+(defun test-while2(string &optional multiple)
+"  Remove trailing  ..."
+  string
+  (while (> (length string) 0)
+      (if (eq (elt string (1- (length string))) 10)
+          (setq string (substring string 0 -1)))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 41.5%
+Output:
+(defun test-while2(string &optional multiple)
+"  Remove trailing  ..."
+  string)
+
+
+================================================================================
+FILE: lap/test-with-current-buffer.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 71.4%
+Output:
+(defun test-with-current-buffer(srcbuf)
+"  Test with-current-buffer and with-current-buffer-safe-macros"
+  
+  (with-current-buffer srcbuf
+      (realgud-cmdbuf-info-in-debugger?= nil)
+      (realgud-cmdbuf-info-bp-list= nil))
+  (or (not srcbuf) (buffer-killed? srcbuf))
+  (and (not buffer-killed?) 
+      (with-current-buffer srcbuf
+          (setq x 1))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 47.1%
+Output:
+(defun test-with-current-buffer(srcbuf)
+"  Test with-current-buffer and with-current-buffer-safe-macros"
+  
+  (cond 
+        ( (buffer-killed? srcbuf))
+        ((not 'buffer-killed?) 
+            
+            srcbuf
+            1
+            (setq x 1))
+        (t nil)))
+
+
+================================================================================
+FILE: lap/test-with-temp-buffer.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 14.4%
+Output:
+(defun compiled-function-0()  
+  (if (buffer-name temp-buffer)
+      (kill-buffer temp-buffer)))
+(defun test-with-temp-buffer()  
+  (with-temp-buffer
+      (insert-file-contents file)
+      (intern (file-name-base file))
+      sub-pkgs))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 22.6%
+Output:
+(defun compiled-function-0()  
+  (if (buffer-name temp-buffer)
+      (kill-buffer temp-buffer)))
+(defun test-with-temp-buffer()  
+  (insert-file-contents file)
+  (intern (file-name-base file))
+  (generate-new-buffer " *temp*")
+  
+  temp-buffer
+  compiled-function-0
+  
+  sub-pkgs)
+
+
+================================================================================
+FILE: test-prish/binom-coeff.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Output:
+(defun binom-coeff(arg1 arg2)
+"   ..."
+  
+  (if (< stack-ref1 stack-ref1)
+      (cond 
+            (t 0)((= 0 0) 
+            (cond 
+                  (t 1)
+                  (t 
+                     (if (= stack-ref1 stack-ref1)
+                         1)))
+            (if (> DUP-empty-stack (- stack-ref2 stack-ref2))
+                    (- stack-ref1 stack-ref1)
+                  DUP-empty-stack))))
+            (/ (fact stack-ref3) (* (fact stack-ref2) (fact (- stack-ref5 stack-ref4)))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Output:
+(defun binom-coeff(arg1 arg2)
+"   ..."
+  
+  (cond 
+        ((< stack-ref1 stack-ref1) 0)
+        (0 1)
+        (stack-ref1 1)
+        ((> 1 (- stack-ref2 stack-ref2)) 
+            (if (- stack-ref1 stack-ref1)
+                    DUP-empty-stack
+                  (/ (fact stack-ref3) (* (fact stack-ref2) (fact (- stack-ref5 stack-ref4))))))
+                (t t)))
+
+
+================================================================================
+FILE: test-prish/catalan.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 68.6%
+Output:
+(defun catalan(arg1)
+"   ..."
+  
+  (if (eq arg1 0)
+          1
+        (- (binom-coeff (* stack-ref1 2) stack-ref2) (binom-coeff (* stack-ref2 2) (1- stack-ref3)))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 68.6%
+Output:
+(defun catalan(arg1)
+"   ..."
+  
+  (if (eq arg1 0)
+          1
+        (- (binom-coeff (* stack-ref1 2) stack-ref2) (binom-coeff (* stack-ref2 2) (1- stack-ref3)))))
+
+
+================================================================================
+FILE: test-prish/check-all.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 38.4%
+Output:
+(defun check-all(arg1 arg2)
+"   ..."
+  (or arg2 
+      (cond 
+            (t nil)
+            (t 
+               (if (eq (mygcd stack-ref2 (car stack-ref2)) 1)
+                   (check-all stack-ref2 (cdr stack-ref2))))
+            
+            (t t))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 69.7%
+Output:
+(defun check-all(arg1 arg2)
+"   ..."
+  
+  (cond 
+        (arg2 nil)
+        ((eq (mygcd stack-ref2 (car stack-ref2)) 1) (check-all stack-ref2 (cdr stack-ref2)))
+        (t t)))
+
+
+================================================================================
+FILE: test-prish/fact.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 72.8%
+Output:
+(defun fact(arg1)
+"   ..."
+  
+  (if (<= arg1 1)
+          1
+        (* 1 (fact (1- stack-ref2)))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 72.8%
+Output:
+(defun fact(arg1)
+"   ..."
+  
+  (if (<= arg1 1)
+          1
+        (* 1 (fact (1- stack-ref2)))))
+
+
+================================================================================
+FILE: test-prish/is-relative-prime.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 30.8%
+Output:
+(defun is-relative-prime(arg1)
+"   ..."
+  (or arg1 
+      (cond 
+            (t t)
+            (t (or (cdr t) t))
+            
+            (t 
+               (if (check-all (car stack-ref1) (cdr stack-ref2))
+                   nil))
+            
+            (t (is-relative-prime (cdr stack-ref1))))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 70.7%
+Output:
+(defun is-relative-prime(arg1)
+"   ..."
+  
+  (cond 
+        (arg1 t)
+        ((cdr t) t)
+        ((check-all (car stack-ref1) (cdr stack-ref2)) nil)
+        (t (is-relative-prime (cdr stack-ref1)))))
+
+
+================================================================================
+FILE: test-prish/max-list.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 1
+Similarity: 0.0%
+Output:
+
+-- Stacks of completed symbols:
+START ::= |- fn_body . 
+and_form ::= expr . GOTO-IF-NIL expr \e_opt_come_from \e_opt_label
+and_form ::= expr . GOTO-IF-NIL expr \e_opt_come_from opt_label
+and_form ::= expr . GOTO-IF-NIL expr opt_come_from \e_opt_label
+and_form ::= expr . GOTO-IF-NIL expr opt_come_from opt_label
+and_form ::= expr . GOTO-IF-NIL-ELSE-POP expr \e_opt_come_from \e_opt_label
+and_form ::= expr . GOTO-IF-NIL-ELSE-POP expr \e_opt_come_from opt_label
+and_form ::= expr . GOTO-IF-NIL-ELSE-POP expr opt_come_from \e_opt_label
+and_form ::= expr . GOTO-IF-NIL-ELSE-POP expr opt_come_from opt_label
+and_form ::= expr GOTO-IF-NIL . expr \e_opt_come_from \e_opt_label
+and_form ::= expr GOTO-IF-NIL . expr \e_opt_come_from opt_label
+and_form ::= expr GOTO-IF-NIL . expr opt_come_from \e_opt_label
+and_form ::= expr GOTO-IF-NIL . expr opt_come_from opt_label
+binary_expr ::= expr . expr binary_op
+binary_expr ::= expr expr . binary_op
+binary_expr ::= expr expr binary_op . 
+binary_expr_stacked ::= STACK-ACCESS . expr binary_op
+binary_expr_stacked ::= expr . STACK-ACCESS binary_op
+binary_expr_stacked ::= expr STACK-ACCESS . binary_op
+binary_expr_stacked ::= expr_stacked . binary_op
+binary_op ::= GTR . 
+body ::= exprs . 
+call_expr0 ::= name_expr . CALL_0
+call_expr1 ::= name_expr . expr_or_stacked CALL_1
+call_expr1 ::= name_expr expr_or_stacked . CALL_1
+call_expr1 ::= name_expr expr_or_stacked CALL_1 . 
+call_expr2 ::= name_expr . expr_or_stacked expr_or_stacked CALL_2
+call_expr2 ::= name_expr expr_or_stacked . expr_or_stacked CALL_2
+call_expr3 ::= name_expr . expr_or_stacked expr_or_stacked expr_or_stacked CALL_3
+call_expr3 ::= name_expr expr_or_stacked . expr_or_stacked expr_or_stacked CALL_3
+call_expr4 ::= name_expr . expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked CALL_4
+call_expr4 ::= name_expr expr_or_stacked . expr_or_stacked expr_or_stacked expr_or_stacked CALL_4
+call_expr5 ::= name_expr . expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked CALL_5
+call_expr5 ::= name_expr expr_or_stacked . expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked CALL_5
+call_expr9 ::= name_expr . expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked CALL_9
+call_expr9 ::= name_expr expr_or_stacked . expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked CALL_9
+clause ::= body . end_clause
+clause ::= body end_clause . 
+clause ::= condition . body end_clause
+come_froms ::= COME_FROM . 
+come_froms ::= come_froms . COME_FROM
+cond_form ::= clause . labeled_clauses
+cond_form ::= clause . labeled_clauses come_froms LABEL
+cond_form ::= clause labeled_clauses . 
+cond_form ::= clause labeled_clauses . come_froms LABEL
+cond_form ::= clause labeled_clauses come_froms . LABEL
+cond_form ::= clause labeled_clauses come_froms LABEL . 
+condition ::= expr . GOTO-IF-NIL \e_opt_come_from \e_opt_label
+condition ::= expr . GOTO-IF-NIL \e_opt_come_from opt_label
+condition ::= expr . GOTO-IF-NIL opt_come_from \e_opt_label
+condition ::= expr . GOTO-IF-NIL opt_come_from opt_label
+condition ::= expr . GOTO-IF-NIL-ELSE-POP \e_opt_come_from \e_opt_label
+condition ::= expr . GOTO-IF-NIL-ELSE-POP \e_opt_come_from opt_label
+condition ::= expr . GOTO-IF-NIL-ELSE-POP opt_come_from \e_opt_label
+condition ::= expr . GOTO-IF-NIL-ELSE-POP opt_come_from opt_label
+condition ::= expr GOTO-IF-NIL . opt_come_from \e_opt_label
+condition ::= expr GOTO-IF-NIL . opt_come_from opt_label
+condition ::= expr GOTO-IF-NIL \e_opt_come_from . opt_label
+condition ::= expr GOTO-IF-NIL \e_opt_come_from \e_opt_label . 
+dolist_list ::= expr . 
+dolist_macro ::= dolist_list . dolist_init_var GOTO-IF-NIL COME_FROM LABEL dolist_loop_iter_set body DUP VARSET GOTO-IF-NOT-NIL COME_FROM LABEL UNBIND
+dolist_macro ::= dolist_list . dolist_init_var GOTO-IF-NIL-ELSE-POP COME_FROM LABEL dolist_loop_iter_set body DUP VARSET GOTO-IF-NOT-NIL CONSTANT COME_FROM LABEL UNBIND
+dolist_macro ::= dolist_list . dolist_init_var GOTO-IF-NIL-ELSE-POP COME_FROM LABEL dolist_loop_iter_set_stacking body_stacked DUP VARSET GOTO-IF-NOT-NIL CONSTANT COME_FROM LABEL UNBIND
+dolist_macro_result ::= dolist_list . dolist_init_var GOTO-IF-NIL COME_FROM LABEL dolist_loop_iter_set body VARREF CDR DUP VARSET GOTO-IF-NOT-NIL COME_FROM LABEL CONSTANT VARSET expr UNBIND
+end_clause ::= RETURN . 
+end_clause ::= RETURN . COME_FROM
+end_clause ::= RETURN COME_FROM . 
+expr ::= DUP . 
+expr ::= STACK-REF . 
+expr ::= binary_expr . 
+expr ::= call_expr1 . 
+expr ::= cond_form . 
+expr ::= if_form . 
+expr ::= name_expr . 
+expr ::= not_expr . 
+expr ::= or_form . 
+expr ::= unary_expr . 
+expr_or_stacked ::= expr . 
+expr_return ::= expr . RETURN
+expr_return ::= expr RETURN . 
+expr_stacked ::= DUP . 
+expr_stmt ::= expr . opt_discard
+expr_stmt ::= expr \e_opt_discard . 
+exprs ::= expr_stmt . 
+exprs ::= exprs . expr_stmt
+exprs ::= exprs expr_stmt . 
+fn_body ::= body . opt_come_from \e_opt_label expr_return
+fn_body ::= body . opt_come_from \e_opt_label stacked_return
+fn_body ::= body . opt_come_from opt_label expr_return
+fn_body ::= body . opt_come_from opt_label stacked_return
+fn_body ::= body . opt_label \e_opt_return
+fn_body ::= body . opt_label opt_return
+fn_body ::= body \e_opt_come_from . opt_label expr_return
+fn_body ::= body \e_opt_come_from . opt_label stacked_return
+fn_body ::= body \e_opt_come_from \e_opt_label . expr_return
+fn_body ::= body \e_opt_come_from \e_opt_label . stacked_return
+fn_body ::= body \e_opt_come_from \e_opt_label expr_return . 
+fn_body ::= body \e_opt_come_from opt_label . expr_return
+fn_body ::= body \e_opt_come_from opt_label . stacked_return
+fn_body ::= body \e_opt_label . opt_return
+fn_body ::= body \e_opt_label \e_opt_return . 
+fn_body ::= body \e_opt_label opt_return . 
+fn_body ::= body opt_come_from . opt_label expr_return
+fn_body ::= body opt_come_from . opt_label stacked_return
+fn_body ::= body opt_come_from \e_opt_label . expr_return
+fn_body ::= body opt_come_from \e_opt_label . stacked_return
+fn_body ::= body opt_come_from opt_label . expr_return
+fn_body ::= body opt_come_from opt_label . stacked_return
+fn_body ::= body opt_label . opt_return
+fn_body ::= body opt_label \e_opt_return . 
+if_else_form ::= expr . GOTO-IF-NIL expr GOTO come_froms LABEL expr \e_opt_come_from \e_opt_label
+if_else_form ::= expr . GOTO-IF-NIL expr GOTO come_froms LABEL expr \e_opt_come_from opt_label
+if_else_form ::= expr . GOTO-IF-NIL expr GOTO come_froms LABEL expr opt_come_from \e_opt_label
+if_else_form ::= expr . GOTO-IF-NIL expr GOTO come_froms LABEL expr opt_come_from opt_label
+if_else_form ::= expr . GOTO-IF-NIL-ELSE-POP expr-stmt RETURN
+if_else_form ::= expr GOTO-IF-NIL . expr GOTO come_froms LABEL expr \e_opt_come_from \e_opt_label
+if_else_form ::= expr GOTO-IF-NIL . expr GOTO come_froms LABEL expr \e_opt_come_from opt_label
+if_else_form ::= expr GOTO-IF-NIL . expr GOTO come_froms LABEL expr opt_come_from \e_opt_label
+if_else_form ::= expr GOTO-IF-NIL . expr GOTO come_froms LABEL expr opt_come_from opt_label
+if_form ::= DUP . GOTO-IF-NIL expr RETURN LABEL expr RETURN
+if_form ::= expr . GOTO-IF-NIL expr
+if_form ::= expr . GOTO-IF-NIL expr \e_opt_come_from \e_opt_label
+if_form ::= expr . GOTO-IF-NIL expr \e_opt_come_from opt_label
+if_form ::= expr . GOTO-IF-NIL expr opt_come_from \e_opt_label
+if_form ::= expr . GOTO-IF-NIL expr opt_come_from opt_label
+if_form ::= expr . GOTO-IF-NOT-NIL expr \e_opt_come_from \e_opt_label
+if_form ::= expr . GOTO-IF-NOT-NIL expr \e_opt_come_from opt_label
+if_form ::= expr . GOTO-IF-NOT-NIL expr opt_come_from \e_opt_label
+if_form ::= expr . GOTO-IF-NOT-NIL expr opt_come_from opt_label
+if_form ::= expr . filler expr_stmt COME_FROM LABEL
+if_form ::= expr GOTO-IF-NIL . expr
+if_form ::= expr GOTO-IF-NIL . expr \e_opt_come_from \e_opt_label
+if_form ::= expr GOTO-IF-NIL . expr \e_opt_come_from opt_label
+if_form ::= expr GOTO-IF-NIL . expr opt_come_from \e_opt_label
+if_form ::= expr GOTO-IF-NIL . expr opt_come_from opt_label
+if_form ::= expr GOTO-IF-NOT-NIL . expr \e_opt_come_from \e_opt_label
+if_form ::= expr GOTO-IF-NOT-NIL . expr \e_opt_come_from opt_label
+if_form ::= expr GOTO-IF-NOT-NIL . expr opt_come_from \e_opt_label
+if_form ::= expr GOTO-IF-NOT-NIL . expr opt_come_from opt_label
+if_form ::= expr GOTO-IF-NOT-NIL expr . opt_come_from \e_opt_label
+if_form ::= expr GOTO-IF-NOT-NIL expr . opt_come_from opt_label
+if_form ::= expr GOTO-IF-NOT-NIL expr \e_opt_come_from . opt_label
+if_form ::= expr GOTO-IF-NOT-NIL expr \e_opt_come_from \e_opt_label . 
+if_form ::= expr GOTO-IF-NOT-NIL expr \e_opt_come_from opt_label . 
+if_form ::= expr GOTO-IF-NOT-NIL expr opt_come_from . opt_label
+if_form ::= expr GOTO-IF-NOT-NIL expr opt_come_from \e_opt_label . 
+if_form ::= expr GOTO-IF-NOT-NIL expr opt_come_from opt_label . 
+if_form ::= expr \e_filler . expr_stmt COME_FROM LABEL
+if_form ::= expr \e_filler expr_stmt . COME_FROM LABEL
+if_form ::= expr \e_filler expr_stmt COME_FROM . LABEL
+if_form ::= expr \e_filler expr_stmt COME_FROM LABEL . 
+if_form_stacked ::= GOTO-IF-NIL . expr \e_opt_come_from \e_opt_label
+if_form_stacked ::= GOTO-IF-NIL . expr \e_opt_come_from opt_label
+if_form_stacked ::= GOTO-IF-NIL . expr opt_come_from \e_opt_label
+if_form_stacked ::= GOTO-IF-NIL . expr opt_come_from opt_label
+labeled_clause ::= LABEL . clause
+labeled_clause ::= LABEL clause . 
+labeled_clauses ::= labeled_clause . 
+labeled_clauses ::= labeled_clause . labeled_clauses
+labeled_final_clause ::= LABEL . condition body come_froms
+name_expr ::= CONSTANT . 
+not_expr ::= expr . GOTO-IF-NOT-NIL
+not_expr ::= expr GOTO-IF-NOT-NIL . 
+opt_come_from ::= COME_FROM . 
+opt_label ::= LABEL . 
+opt_return ::= RETURN . 
+or_form ::= expr . GOTO-IF-NOT-NIL expr
+or_form ::= expr . GOTO-IF-NOT-NIL expr GOTO-IF-NIL-ELSE-POP COME_FROM LABEL
+or_form ::= expr . GOTO-IF-NOT-NIL-ELSE-POP expr \e_opt_come_from \e_opt_label
+or_form ::= expr . GOTO-IF-NOT-NIL-ELSE-POP expr \e_opt_come_from opt_label
+or_form ::= expr . GOTO-IF-NOT-NIL-ELSE-POP expr opt_come_from \e_opt_label
+or_form ::= expr . GOTO-IF-NOT-NIL-ELSE-POP expr opt_come_from opt_label
+or_form ::= expr GOTO-IF-NOT-NIL . expr
+or_form ::= expr GOTO-IF-NOT-NIL . expr GOTO-IF-NIL-ELSE-POP COME_FROM LABEL
+or_form ::= expr GOTO-IF-NOT-NIL expr . 
+or_form ::= expr GOTO-IF-NOT-NIL expr . GOTO-IF-NIL-ELSE-POP COME_FROM LABEL
+set_buffer ::= expr . SET-BUFFER
+set_expr ::= expr . expr SET
+set_expr ::= expr . expr STACK-SET SET
+set_expr ::= expr expr . SET
+set_expr ::= expr expr . STACK-SET SET
+set_expr_stacked ::= expr_stacked . expr SET
+setq_form ::= expr . STACK-ACCESS VARSET
+setq_form ::= expr . VARSET
+setq_form ::= expr STACK-ACCESS . VARSET
+setq_form_dup ::= expr . DUP VARSET
+setq_form_stacked ::= expr_stacked . DUP VARSET
+setq_form_stacking ::= expr . DUP VARSET
+stacked_return ::= STACK-ACCESS . RETURN
+ternary_expr ::= expr . expr expr ternary_op
+ternary_expr ::= expr expr . expr ternary_op
+ternary_expr ::= expr expr expr . ternary_op
+ternary_expr_stacked ::= STACK-ACCESS . expr expr ternary_op
+ternary_expr_stacked ::= expr . expr ternary_op
+ternary_expr_stacked ::= expr expr . ternary_op
+unary_expr ::= STACK-ACCESS . unary_op
+unary_expr ::= STACK-ACCESS unary_op . 
+unary_expr ::= expr . unary_op
+unary_expr ::= expr unary_op . 
+unary_expr_stacked ::= STACK-ACCESS . unary_op
+unary_expr_stacked ::= STACK-ACCESS unary_op . 
+unary_expr_stacked ::= unary_op . 
+unary_op ::= CAR . 
+unary_op ::= CDR . 
+unwind_protect_form ::= expr . UNWIND-PROTECT \e_opt_exprs
+unwind_protect_form ::= expr . UNWIND-PROTECT opt_exprs
+varbind ::= expr . STACK-ACCESS VARBIND
+varbind ::= expr . VARBIND
+varbind ::= expr STACK-ACCESS . VARBIND
+varlist_stacked ::= expr . varlist_stacked_inner DUP VARBIND
+varlist_stacked ::= expr \e_varlist_stacked_inner . DUP VARBIND
+varlist_stacked_inner ::= expr . varlist_stacked_inner VARBIND
+varlist_stacked_inner ::= expr \e_varlist_stacked_inner . VARBIND
+when_macro ::= expr . GOTO-IF-NIL body come_froms LABEL
+when_macro ::= expr . GOTO-IF-NIL-ELSE-POP body come_froms LABEL
+when_macro ::= expr GOTO-IF-NIL . body come_froms LABEL
+while_form1 ::= expr . COME_FROM LABEL expr GOTO-IF-NIL body GOTO come_froms LABEL
+while_form1 ::= expr . COME_FROM LABEL expr GOTO-IF-NIL-ELSE-POP body GOTO come_froms LABEL
+while_form1 ::= expr COME_FROM . LABEL expr GOTO-IF-NIL body GOTO come_froms LABEL
+while_form1 ::= expr COME_FROM . LABEL expr GOTO-IF-NIL-ELSE-POP body GOTO come_froms LABEL
+while_form1 ::= expr COME_FROM LABEL . expr GOTO-IF-NIL body GOTO come_froms LABEL
+while_form1 ::= expr COME_FROM LABEL . expr GOTO-IF-NIL-ELSE-POP body GOTO come_froms LABEL
+while_form1 ::= expr COME_FROM LABEL expr . GOTO-IF-NIL body GOTO come_froms LABEL
+while_form1 ::= expr COME_FROM LABEL expr . GOTO-IF-NIL-ELSE-POP body GOTO come_froms LABEL
+while_form2 ::= COME_FROM . LABEL expr GOTO-IF-NIL body GOTO come_froms LABEL
+while_form2 ::= COME_FROM . LABEL expr GOTO-IF-NIL-ELSE-POP body GOTO come_froms LABEL
+while_form2 ::= COME_FROM LABEL . expr GOTO-IF-NIL body GOTO come_froms LABEL
+while_form2 ::= COME_FROM LABEL . expr GOTO-IF-NIL-ELSE-POP body GOTO come_froms LABEL
+while_form2 ::= COME_FROM LABEL expr . GOTO-IF-NIL body GOTO come_froms LABEL
+while_form2 ::= COME_FROM LABEL expr . GOTO-IF-NIL-ELSE-POP body GOTO come_froms LABEL
+Instruction context:
+->     0 DUP       	[1]
+       1 GOTO-IF-NOT-NIL 1	[0]
+       4 CONSTANT   0	[1]
+       5 RETURN    	[0]
+       6 COME_FROM  1
+       6 LABEL      :1	[0]
+     6:1 DUP       	[1]
+       7 CDR       	[1]
+       8 GOTO-IF-NOT-NIL 2	[0]
+      11 STACK-ACCESS 1
+      11 CAR       	[0]
+      12 RETURN    	[-1]
+      13 COME_FROM  8
+      13 LABEL      :2	[0]
+file: test-prish/max-list.lap
+	 Parse error at or near `DUP' instruction at offset 0
+
+
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 1
+Similarity: 0.0%
+Error:
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 235, in <module>
+    main()
+    ~~~~^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 230, in main
+    sys.exit(deparse(lap_filename, sys.stdout, show_assembly=assembly,
+             ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     write_cfg=graphs,
+                     ^^^^^^^^^^^^^^^^^
+                     show_grammar=grammar, show_tree=tree, use_cfg=use_cfg))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 186, in deparse
+    result = formatter.traverse(ast, indent)
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 255, in traverse
+    self.preorder(node)
+    ~~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 112, in preorder
+    self.default(node)
+    ~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 678, in default
+    self.template_engine(TABLE_DIRECT[key.kind], node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 548, in template_engine
+    self.preorder(node[index])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 110, in preorder
+    func(node)
+    ~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 371, in n_clause
+    self.template_engine(("\n%|(%c %+%c%)", 0, 1), node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 548, in template_engine
+    self.preorder(node[index])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 112, in preorder
+    self.default(node)
+    ~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 678, in default
+    self.template_engine(TABLE_DIRECT[key.kind], node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 638, in template_engine
+    self.preorder(subnode)
+    ~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 110, in preorder
+    func(node)
+    ~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 440, in n_expr_stmt
+    value = self.traverse(node[0][0])
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 255, in traverse
+    self.preorder(node)
+    ~~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 112, in preorder
+    self.default(node)
+    ~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 678, in default
+    self.template_engine(TABLE_DIRECT[key.kind], node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 595, in template_engine
+    subnode = self.access()
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 203, in access
+    return self.eval_stack[-1]
+           ~~~~~~~~~~~~~~~^^^^
+IndexError: list index out of range
+
+
+================================================================================
+FILE: test-prish/mygcd.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 1
+Similarity: 0.0%
+Output:
+
+-- Stacks of completed symbols:
+START ::= |- fn_body . 
+and_form ::= expr . GOTO-IF-NIL expr \e_opt_come_from \e_opt_label
+and_form ::= expr . GOTO-IF-NIL expr \e_opt_come_from opt_label
+and_form ::= expr . GOTO-IF-NIL expr opt_come_from \e_opt_label
+and_form ::= expr . GOTO-IF-NIL expr opt_come_from opt_label
+and_form ::= expr . GOTO-IF-NIL-ELSE-POP expr \e_opt_come_from \e_opt_label
+and_form ::= expr . GOTO-IF-NIL-ELSE-POP expr \e_opt_come_from opt_label
+and_form ::= expr . GOTO-IF-NIL-ELSE-POP expr opt_come_from \e_opt_label
+and_form ::= expr . GOTO-IF-NIL-ELSE-POP expr opt_come_from opt_label
+and_form ::= expr GOTO-IF-NIL . expr \e_opt_come_from \e_opt_label
+and_form ::= expr GOTO-IF-NIL . expr \e_opt_come_from opt_label
+and_form ::= expr GOTO-IF-NIL . expr opt_come_from \e_opt_label
+and_form ::= expr GOTO-IF-NIL . expr opt_come_from opt_label
+and_form ::= expr GOTO-IF-NIL expr . opt_come_from \e_opt_label
+and_form ::= expr GOTO-IF-NIL expr . opt_come_from opt_label
+and_form ::= expr GOTO-IF-NIL expr \e_opt_come_from . opt_label
+and_form ::= expr GOTO-IF-NIL expr \e_opt_come_from \e_opt_label . 
+binary_expr ::= expr . expr binary_op
+binary_expr ::= expr expr . binary_op
+binary_expr ::= expr expr binary_op . 
+binary_expr_stacked ::= expr . STACK-ACCESS binary_op
+binary_expr_stacked ::= expr_stacked . binary_op
+binary_op ::= EQ . 
+body ::= exprs . 
+call_expr0 ::= name_expr . CALL_0
+call_expr1 ::= name_expr . expr_or_stacked CALL_1
+call_expr2 ::= name_expr . expr_or_stacked expr_or_stacked CALL_2
+call_expr3 ::= name_expr . expr_or_stacked expr_or_stacked expr_or_stacked CALL_3
+call_expr4 ::= name_expr . expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked CALL_4
+call_expr5 ::= name_expr . expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked CALL_5
+call_expr9 ::= name_expr . expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked expr_or_stacked CALL_9
+clause ::= body . end_clause
+clause ::= body end_clause . 
+clause ::= condition . body end_clause
+clause ::= condition body . end_clause
+clause ::= condition body end_clause . 
+cond_form ::= clause . labeled_clauses
+cond_form ::= clause . labeled_clauses come_froms LABEL
+condition ::= expr . GOTO-IF-NIL \e_opt_come_from \e_opt_label
+condition ::= expr . GOTO-IF-NIL \e_opt_come_from opt_label
+condition ::= expr . GOTO-IF-NIL opt_come_from \e_opt_label
+condition ::= expr . GOTO-IF-NIL opt_come_from opt_label
+condition ::= expr . GOTO-IF-NIL-ELSE-POP \e_opt_come_from \e_opt_label
+condition ::= expr . GOTO-IF-NIL-ELSE-POP \e_opt_come_from opt_label
+condition ::= expr . GOTO-IF-NIL-ELSE-POP opt_come_from \e_opt_label
+condition ::= expr . GOTO-IF-NIL-ELSE-POP opt_come_from opt_label
+condition ::= expr GOTO-IF-NIL . opt_come_from \e_opt_label
+condition ::= expr GOTO-IF-NIL . opt_come_from opt_label
+condition ::= expr GOTO-IF-NIL \e_opt_come_from . opt_label
+condition ::= expr GOTO-IF-NIL \e_opt_come_from \e_opt_label . 
+dolist_list ::= expr . 
+dolist_macro ::= dolist_list . dolist_init_var GOTO-IF-NIL COME_FROM LABEL dolist_loop_iter_set body DUP VARSET GOTO-IF-NOT-NIL COME_FROM LABEL UNBIND
+dolist_macro ::= dolist_list . dolist_init_var GOTO-IF-NIL-ELSE-POP COME_FROM LABEL dolist_loop_iter_set body DUP VARSET GOTO-IF-NOT-NIL CONSTANT COME_FROM LABEL UNBIND
+dolist_macro ::= dolist_list . dolist_init_var GOTO-IF-NIL-ELSE-POP COME_FROM LABEL dolist_loop_iter_set_stacking body_stacked DUP VARSET GOTO-IF-NOT-NIL CONSTANT COME_FROM LABEL UNBIND
+dolist_macro_result ::= dolist_list . dolist_init_var GOTO-IF-NIL COME_FROM LABEL dolist_loop_iter_set body VARREF CDR DUP VARSET GOTO-IF-NOT-NIL COME_FROM LABEL CONSTANT VARSET expr UNBIND
+end_clause ::= RETURN . 
+end_clause ::= RETURN . COME_FROM
+end_clause ::= RETURN COME_FROM . 
+expr ::= DUP . 
+expr ::= STACK-REF . 
+expr ::= and_form . 
+expr ::= binary_expr . 
+expr ::= if_form . 
+expr ::= name_expr . 
+expr_stacked ::= DUP . 
+expr_stacked ::= if_form_stacked . 
+expr_stmt ::= expr . opt_discard
+expr_stmt ::= expr \e_opt_discard . 
+exprs ::= expr_stmt . 
+exprs ::= exprs . expr_stmt
+fn_body ::= body . opt_come_from \e_opt_label expr_return
+fn_body ::= body . opt_come_from \e_opt_label stacked_return
+fn_body ::= body . opt_come_from opt_label expr_return
+fn_body ::= body . opt_come_from opt_label stacked_return
+fn_body ::= body . opt_label \e_opt_return
+fn_body ::= body . opt_label opt_return
+fn_body ::= body \e_opt_come_from . opt_label expr_return
+fn_body ::= body \e_opt_come_from . opt_label stacked_return
+fn_body ::= body \e_opt_come_from \e_opt_label . expr_return
+fn_body ::= body \e_opt_come_from \e_opt_label . stacked_return
+fn_body ::= body \e_opt_label . opt_return
+fn_body ::= body \e_opt_label \e_opt_return . 
+fn_body ::= body \e_opt_label opt_return . 
+if_else_form ::= expr . GOTO-IF-NIL expr GOTO come_froms LABEL expr \e_opt_come_from \e_opt_label
+if_else_form ::= expr . GOTO-IF-NIL expr GOTO come_froms LABEL expr \e_opt_come_from opt_label
+if_else_form ::= expr . GOTO-IF-NIL expr GOTO come_froms LABEL expr opt_come_from \e_opt_label
+if_else_form ::= expr . GOTO-IF-NIL expr GOTO come_froms LABEL expr opt_come_from opt_label
+if_else_form ::= expr . GOTO-IF-NIL-ELSE-POP expr-stmt RETURN
+if_else_form ::= expr GOTO-IF-NIL . expr GOTO come_froms LABEL expr \e_opt_come_from \e_opt_label
+if_else_form ::= expr GOTO-IF-NIL . expr GOTO come_froms LABEL expr \e_opt_come_from opt_label
+if_else_form ::= expr GOTO-IF-NIL . expr GOTO come_froms LABEL expr opt_come_from \e_opt_label
+if_else_form ::= expr GOTO-IF-NIL . expr GOTO come_froms LABEL expr opt_come_from opt_label
+if_else_form ::= expr GOTO-IF-NIL expr . GOTO come_froms LABEL expr \e_opt_come_from \e_opt_label
+if_else_form ::= expr GOTO-IF-NIL expr . GOTO come_froms LABEL expr \e_opt_come_from opt_label
+if_else_form ::= expr GOTO-IF-NIL expr . GOTO come_froms LABEL expr opt_come_from \e_opt_label
+if_else_form ::= expr GOTO-IF-NIL expr . GOTO come_froms LABEL expr opt_come_from opt_label
+if_form ::= DUP . GOTO-IF-NIL expr RETURN LABEL expr RETURN
+if_form ::= expr . GOTO-IF-NIL expr
+if_form ::= expr . GOTO-IF-NIL expr \e_opt_come_from \e_opt_label
+if_form ::= expr . GOTO-IF-NIL expr \e_opt_come_from opt_label
+if_form ::= expr . GOTO-IF-NIL expr opt_come_from \e_opt_label
+if_form ::= expr . GOTO-IF-NIL expr opt_come_from opt_label
+if_form ::= expr . GOTO-IF-NOT-NIL expr \e_opt_come_from \e_opt_label
+if_form ::= expr . GOTO-IF-NOT-NIL expr \e_opt_come_from opt_label
+if_form ::= expr . GOTO-IF-NOT-NIL expr opt_come_from \e_opt_label
+if_form ::= expr . GOTO-IF-NOT-NIL expr opt_come_from opt_label
+if_form ::= expr . filler expr_stmt COME_FROM LABEL
+if_form ::= expr GOTO-IF-NIL . expr
+if_form ::= expr GOTO-IF-NIL . expr \e_opt_come_from \e_opt_label
+if_form ::= expr GOTO-IF-NIL . expr \e_opt_come_from opt_label
+if_form ::= expr GOTO-IF-NIL . expr opt_come_from \e_opt_label
+if_form ::= expr GOTO-IF-NIL . expr opt_come_from opt_label
+if_form ::= expr GOTO-IF-NIL expr . 
+if_form ::= expr GOTO-IF-NIL expr . opt_come_from \e_opt_label
+if_form ::= expr GOTO-IF-NIL expr . opt_come_from opt_label
+if_form ::= expr GOTO-IF-NIL expr \e_opt_come_from . opt_label
+if_form ::= expr GOTO-IF-NIL expr \e_opt_come_from \e_opt_label . 
+if_form ::= expr \e_filler . expr_stmt COME_FROM LABEL
+if_form_stacked ::= GOTO-IF-NIL . expr \e_opt_come_from \e_opt_label
+if_form_stacked ::= GOTO-IF-NIL . expr \e_opt_come_from opt_label
+if_form_stacked ::= GOTO-IF-NIL . expr opt_come_from \e_opt_label
+if_form_stacked ::= GOTO-IF-NIL . expr opt_come_from opt_label
+if_form_stacked ::= GOTO-IF-NIL expr . opt_come_from \e_opt_label
+if_form_stacked ::= GOTO-IF-NIL expr . opt_come_from opt_label
+if_form_stacked ::= GOTO-IF-NIL expr \e_opt_come_from . opt_label
+if_form_stacked ::= GOTO-IF-NIL expr \e_opt_come_from \e_opt_label . 
+labeled_clause ::= LABEL . clause
+labeled_final_clause ::= LABEL . condition body come_froms
+labeled_final_clause ::= LABEL condition . body come_froms
+name_expr ::= CONSTANT . 
+not_expr ::= expr . GOTO-IF-NOT-NIL
+opt_return ::= RETURN . 
+or_form ::= expr . GOTO-IF-NOT-NIL expr
+or_form ::= expr . GOTO-IF-NOT-NIL expr GOTO-IF-NIL-ELSE-POP COME_FROM LABEL
+or_form ::= expr . GOTO-IF-NOT-NIL-ELSE-POP expr \e_opt_come_from \e_opt_label
+or_form ::= expr . GOTO-IF-NOT-NIL-ELSE-POP expr \e_opt_come_from opt_label
+or_form ::= expr . GOTO-IF-NOT-NIL-ELSE-POP expr opt_come_from \e_opt_label
+or_form ::= expr . GOTO-IF-NOT-NIL-ELSE-POP expr opt_come_from opt_label
+set_buffer ::= expr . SET-BUFFER
+set_expr ::= expr . expr SET
+set_expr ::= expr . expr STACK-SET SET
+set_expr ::= expr expr . SET
+set_expr ::= expr expr . STACK-SET SET
+set_expr_stacked ::= expr_stacked . expr SET
+set_expr_stacked ::= expr_stacked expr . SET
+setq_form ::= expr . STACK-ACCESS VARSET
+setq_form ::= expr . VARSET
+setq_form_dup ::= expr . DUP VARSET
+setq_form_stacked ::= expr_stacked . DUP VARSET
+setq_form_stacking ::= expr . DUP VARSET
+ternary_expr ::= expr . expr expr ternary_op
+ternary_expr ::= expr expr . expr ternary_op
+ternary_expr_stacked ::= expr . expr ternary_op
+ternary_expr_stacked ::= expr expr . ternary_op
+unary_expr ::= expr . unary_op
+unwind_protect_form ::= expr . UNWIND-PROTECT \e_opt_exprs
+unwind_protect_form ::= expr . UNWIND-PROTECT opt_exprs
+varbind ::= expr . STACK-ACCESS VARBIND
+varbind ::= expr . VARBIND
+varlist_stacked ::= expr . varlist_stacked_inner DUP VARBIND
+varlist_stacked ::= expr \e_varlist_stacked_inner . DUP VARBIND
+varlist_stacked_inner ::= expr . varlist_stacked_inner VARBIND
+varlist_stacked_inner ::= expr \e_varlist_stacked_inner . VARBIND
+when_macro ::= expr . GOTO-IF-NIL body come_froms LABEL
+when_macro ::= expr . GOTO-IF-NIL-ELSE-POP body come_froms LABEL
+when_macro ::= expr GOTO-IF-NIL . body come_froms LABEL
+when_macro ::= expr GOTO-IF-NIL body . come_froms LABEL
+while_form1 ::= expr . COME_FROM LABEL expr GOTO-IF-NIL body GOTO come_froms LABEL
+while_form1 ::= expr . COME_FROM LABEL expr GOTO-IF-NIL-ELSE-POP body GOTO come_froms LABEL
+Instruction context:
+->     0 DUP       	[1]
+       1 CONSTANT   0	[2]
+       2 EQ        	[1]
+       3 GOTO-IF-NIL 1	[0]
+       6 STACK-REF  1	[1]
+       7 RETURN    	[0]
+       8 COME_FROM  3
+       8 LABEL      :1	[0]
+file: test-prish/mygcd.lap
+	 Parse error at or near `DUP' instruction at offset 0
+
+
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 1
+Similarity: 0.0%
+Error:
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 235, in <module>
+    main()
+    ~~~~^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 230, in main
+    sys.exit(deparse(lap_filename, sys.stdout, show_assembly=assembly,
+             ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     write_cfg=graphs,
+                     ^^^^^^^^^^^^^^^^^
+                     show_grammar=grammar, show_tree=tree, use_cfg=use_cfg))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/__main__.py", line 186, in deparse
+    result = formatter.traverse(ast, indent)
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 255, in traverse
+    self.preorder(node)
+    ~~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 112, in preorder
+    self.default(node)
+    ~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 678, in default
+    self.template_engine(TABLE_DIRECT[key.kind], node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 548, in template_engine
+    self.preorder(node[index])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 110, in preorder
+    func(node)
+    ~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 371, in n_clause
+    self.template_engine(("\n%|(%c %+%c%)", 0, 1), node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 548, in template_engine
+    self.preorder(node[index])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 112, in preorder
+    self.default(node)
+    ~~~~~~~~~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 678, in default
+    self.template_engine(TABLE_DIRECT[key.kind], node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 638, in template_engine
+    self.preorder(subnode)
+    ~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 110, in preorder
+    func(node)
+    ~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 444, in n_expr_stmt
+    self.template_engine(("%c", 0), node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 548, in template_engine
+    self.preorder(node[index])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 117, in preorder
+    self.preorder(kid)
+    ~~~~~~~~~~~~~^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/.venv/lib/python3.13/site-packages/spark_parser/ast.py", line 110, in preorder
+    func(node)
+    ~~~~^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 408, in n_call_expr1
+    self.template_engine(("(%p%Q %l%P)", 0, 0, (1, args + 1), 1), node)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 620, in template_engine
+    self.pop(count)
+    ~~~~~~~~^^^^^^^
+  File "/Users/prish/repos/cosc59/elisp-decompile/lapdecompile/semantics.py", line 196, in pop
+    self.eval_stack.pop()
+    ~~~~~~~~~~~~~~~~~~~^^
+IndexError: pop from empty list
+
+
+================================================================================
+FILE: test-prish/simple-add.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 98.5%
+Output:
+(defun simple-add(x y)
+  (+ x y))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 98.5%
+Output:
+(defun simple-add(x y)
+  (+ x y))
+
+
+================================================================================
+FILE: test-prish/simple-if.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 80.3%
+Output:
+(defun simple-if(arg1)
+"   ..."
+  
+  (if (> arg1 0)
+          'true
+        'false))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 80.3%
+Output:
+(defun simple-if(arg1)
+"   ..."
+  
+  (if (> arg1 0)
+          'true
+        'false))
+
+
+================================================================================
+FILE: test-prish/sum-evens.lap
+================================================================================
+
+GRAMMAR-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 37.6%
+Output:
+(defun sum-evens(list)
+  (or list 
+      (cond 
+            (t 0)
+            (t 
+               (let (
+                     (sum (sum-evens (cdr list))))
+                   (if (evenp (car list))
+                           (+ sum (car list))
+                         sum))))))
+
+
+CFG-BASED:
+--------------------------------------------------------------------------------
+Return code: 0
+Similarity: 70.3%
+Output:
+(defun sum-evens(list)  
+  (cond 
+        (list 0)
+        ((sum-evens (cdr list)) 
+            (if (+ sum (car list))
+                sum))
+        (t sum)))
+

@@ -1,0 +1,26 @@
+byte code for is-relative-prime:
+  doc:   ...
+  args: (arg1)
+0	dup	  
+1	goto-if-not-nil 1
+4	constant  t
+5	return	  
+6:1	dup	  
+7	cdr	  
+8	goto-if-not-nil 2
+11	constant  t
+12	return	  
+13:2	constant  check-all
+14	stack-ref 1
+15	car	  
+16	stack-ref 2
+17	cdr	  
+18	call	  2
+19	goto-if-nil 3
+22	constant  nil
+23	return	  
+24:3	constant  is-relative-prime
+25	stack-ref 1
+26	cdr	  
+27	call	  1
+28	return	  

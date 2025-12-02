@@ -1,0 +1,24 @@
+byte code for sum-evens:
+  args: (list)
+0	varref	  list
+1	goto-if-not-nil 1
+4	constant  0
+5	return	  
+6:1	constant  sum-evens
+7	varref	  list
+8	cdr	  
+9	call	  1
+10	varbind	  sum
+11	constant  evenp
+12	varref	  list
+13	car	  
+14	call	  1
+15	goto-if-nil 2
+18	varref	  sum
+19	varref	  list
+20	car	  
+21	plus	  
+22	goto	  3
+25:2	varref	  sum
+26:3	unbind	  1
+27	return	  

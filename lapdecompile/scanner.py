@@ -30,12 +30,12 @@ class LapScanner:
             line = self.lines[self.cur_index]
             self.cur_index += 1
             fn_type = "defun"
-            m = re.match("^byte code for macro (\S+):$", line)
+            m = re.match(r"^byte code for macro (\S+):$", line)
             if m:
                 fn_type = "defmacro"
                 name = m.group(1)
             else:
-                m = re.match("^byte code for (\S+):$", line)
+                m = re.match(r"^byte code for (\S+):$", line)
                 if m:
                     name = m.group(1)
                 elif re.match("^byte code:$", line):
@@ -58,11 +58,11 @@ class LapScanner:
         customize = {}
 
         line = self.lines[self.cur_index]
-        m = re.match("\s+doc:(.*)", line)
+        m = re.match(r"\s+doc:(.*)", line)
         if m:
             docstring = '\n"%s"\n' % m.group(1).rstrip("\n")
-        elif re.match("\s+doc-start ", line):
-            m = re.match("^\s+doc-start (\d+):  (.*)$", line)
+        elif re.match(r"\s+doc-start ", line):
+            m = re.match(r"^\s+doc-start (\d+):  (.*)$", line)
             if m:
                 tot_len = int(m.group(1))
                 docstring = '\n  "' + m.group(2) + "\n"
@@ -82,11 +82,11 @@ class LapScanner:
 
         self.cur_index += 1
         line = self.lines[self.cur_index]
-        m = re.match("^\s+args: (\([^)]*\))", line)
+        m = re.match(r"^\s+args: (\([^)]*\))", line)
         if m:
             args = m.group(1)
             self.cur_index += 1
-        elif re.match("^\s+args: nil", line):
+        elif re.match(r"^\s+args: nil", line):
             args = "()"
             self.cur_index += 1
         else:
@@ -94,7 +94,7 @@ class LapScanner:
 
         line = self.lines[self.cur_index]
         interactive = None
-        m = re.match("^\s+interactive:\s+(.*)$", line)
+        m = re.match(r"^\s+interactive:\s+(.*)$", line)
         if m:
             interactive = m.group(1).rstrip("\n")
             self.cur_index += 1
@@ -123,7 +123,7 @@ class LapScanner:
             offset, opname = fields[:2]
             if opname == "constant":
                 attr = line[line.index("constant") + len("constant"):].strip()
-                attr = attr.replace("\?", "?")
+                attr = attr.replace(r"\?", "?")
                 if attr == "<compiled-function>":
                     fn_name = "compiled-function-%d" % self.last_compiled_function
                     self.last_compiled_function += 1

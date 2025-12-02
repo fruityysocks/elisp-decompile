@@ -8,6 +8,7 @@ from lapdecompile.transform import TransformTree
 from lapdecompile.bb import basic_blocks, ingest
 from lapdecompile.cfg import ControlFlowGraph
 from lapdecompile.dominators import DominatorTree, build_df
+from lapdecompile.structure import structure_cfg
 
 
 import os, sys
@@ -15,6 +16,15 @@ import click
 
 
 def control_flow(name, instructions, show_assembly, write_cfg):
+    """
+    Flow control analysis of instruction.
+
+    Returns:
+        tuple: (instructions, cfg, dom_tree) where:
+            - instructions: processed instruction tokens
+            - cfg: ControlFlowGraph object (or None if error)
+            - dom_tree: Dominator tree (or None if error)
+    """
     #  Flow control analysis of instruction
     bblocks, instructions = basic_blocks(instructions, show_assembly)
 
@@ -42,17 +52,29 @@ def control_flow(name, instructions, show_assembly, write_cfg):
             os.system("dot -Tpng %s > %s" % (dot_path, png_path))
             print("=" * 30)
         instructions = ingest(bblocks, instructions, show_assembly)
-        return instructions
+        return instructions, cfg, dom_tree
     except:
         import traceback
 
         traceback.print_exc()
         print("Unexpected error:", sys.exc_info()[0])
         print("%s had an error" % name)
-        return instructions
+        return instructions, None, None
 
 
-def deparse(path, outstream, show_assembly, write_cfg, show_grammar, show_tree):
+def deparse(path, outstream, show_assembly, write_cfg, show_grammar, show_tree, use_cfg=False):
+    """
+    Decompile a LAP file to Emacs Lisp source code.
+
+    Args:
+        path: Path to LAP file
+        outstream: Output stream for generated code
+        show_assembly: Show LAP assembly
+        write_cfg: Write control-flow graphs
+        show_grammar: Show grammar reductions
+        show_tree: Show parse tree (none/before/after/full)
+        use_cfg: Use CFG-based approach instead of grammar-based parser
+    """
     # Scan...
     with open(path, "r") as fp:
         scanner = LapScanner(fp, show_assembly=show_assembly)
@@ -65,42 +87,64 @@ def deparse(path, outstream, show_assembly, write_cfg, show_grammar, show_tree):
 
         tokens, customize = fn.tokens, fn.customize
         name = f"{osp.basename(path)}:{fn_name}"
-        tokens = control_flow(name, tokens, show_assembly, write_cfg)
+        tokens, cfg, dom_tree = control_flow(name, tokens, show_assembly, write_cfg)
 
-        # Parse...
-        p = ElispParser(AST, tokens)
-        p.add_custom_rules(tokens, customize)
+        if use_cfg and cfg is not None:
+            try:
+                struct = structure_cfg(cfg, tokens)
 
-        parser_debug = {
-            "rules": False,
-            "transition": False,
-            "reduce": show_grammar,
-            "errorstack": "full",
-            "dups": False,
-        }
+                ast = struct.to_ast(ElispParser, tokens)
 
-        try:
-            ast = p.parse(tokens, debug=parser_debug)
-        except ParserError as e:
-            print("file: %s\n\t %s\n" % (path, e))
-            rc = 1
-            continue
+                if show_tree in ("full", "before"):
+                    print("CFG-based AST:")
+                    print(ast)
 
-        # Before transformation
-        if show_tree in ("full", "before"):
-            print(ast)
+                transformed_ast = TransformTree(ast, debug=False).traverse(ast)
 
-        # .. and Generate Elisp
-        transformed_ast = TransformTree(ast, debug=False).traverse(ast)
+                if show_tree == "full":
+                    print("=" * 30)
 
-        if show_tree == "full":
-            print("=" * 30)
+                if show_tree in ("full", "after"):
+                    print(ast)
 
-        # After transformation
-        if show_tree in ("full", "after"):
-            print(ast)
+            except Exception as e:
+                print(f"CFG-based approach failed: {e}")
+                import traceback
+                traceback.print_exc()
+                print("Falling back to grammar-based parser...")
+                use_cfg = False  # Fall back to old approach
 
-        formatter = SourceWalker(transformed_ast)
+        if not use_cfg:
+            p = ElispParser(AST, tokens)
+            p.add_custom_rules(tokens, customize)
+
+            parser_debug = {
+                "rules": False,
+                "transition": False,
+                "reduce": show_grammar,
+                "errorstack": "full",
+                "dups": False,
+            }
+
+            try:
+                ast = p.parse(tokens, debug=parser_debug)
+            except ParserError as e:
+                print("file: %s\n\t %s\n" % (path, e))
+                rc = 1
+                continue
+
+            if show_tree in ("full", "before"):
+                print(ast)
+
+            transformed_ast = TransformTree(ast, debug=False).traverse(ast)
+
+            if show_tree == "full":
+                print("=" * 30)
+
+            if show_tree in ("full", "after"):
+                print(ast)
+
+        formatter = SourceWalker(transformed_ast, func_args=fn.args)
         is_file = fn.fn_type == "file"
         if is_file:
             indent = header = ""
@@ -148,14 +192,19 @@ def deparse(path, outstream, show_assembly, write_cfg, show_grammar, show_tree):
 )
 @click.option("-t", "tree_alias", flag_value="after", help="alias for --tree=after")
 @click.option("-T", "tree_alias", flag_value="full", help="alias for --tree=full")
+@click.option(
+    "--use-cfg/--use-parser",
+    default=False,
+    help="Use CFG-based approach (new) vs grammar-based parser (old)",
+)
 @click.argument("lap-filename", type=click.Path(exists=True))
-def main(assembly, graphs, grammar, tree, tree_alias, lap_filename):
+def main(assembly, graphs, grammar, tree, tree_alias, use_cfg, lap_filename):
     """Lisp Assembler Program (LAP) decompiler"""
     if tree_alias:
         tree = tree_alias
     sys.exit(deparse(lap_filename, sys.stdout, show_assembly=assembly,
                      write_cfg=graphs,
-                     show_grammar=grammar, show_tree=tree))
+                     show_grammar=grammar, show_tree=tree, use_cfg=use_cfg))
 
 if __name__ == "__main__":
     main()

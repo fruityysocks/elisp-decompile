@@ -1,0 +1,46 @@
+byte code for binom-coeff:
+  doc:   ...
+  args: (arg1 arg2)
+0	stack-ref 1
+1	stack-ref 1
+2	lss	  
+3	goto-if-nil 1
+6	constant  0
+7	return	  
+8:1	dup	  
+9	constant  0
+10	eqlsign	  
+11	goto-if-nil 2
+14	constant  1
+15	return	  
+16:2	stack-ref 1
+17	stack-ref 1
+18	eqlsign	  
+19	goto-if-nil 3
+22	constant  1
+23	return	  
+24:3	dup	  
+25	stack-ref 2
+26	stack-ref 2
+27	diff	  
+28	gtr	  
+29	goto-if-nil 4
+32	stack-ref 1
+33	stack-ref 1
+34	diff	  
+35	goto	  5
+38:4	dup	  
+39:5	constant  fact
+40	stack-ref 3
+41	call	  1
+42	constant  fact
+43	stack-ref 2
+44	call	  1
+45	constant  fact
+46	stack-ref 5
+47	stack-ref 4
+48	diff	  
+49	call	  1
+50	mult	  
+51	quo	  
+52	return	  

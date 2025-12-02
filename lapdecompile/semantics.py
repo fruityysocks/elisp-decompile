@@ -150,7 +150,7 @@ class SourceWalker(GenericASTTraversal, object):
         None,
     )
 
-    def __init__(self, ast, debug=False):
+    def __init__(self, ast, debug=False, func_args=None):
         GenericASTTraversal.__init__(self, ast=None)
         params = {"f": StringIO(), "indent": ""}
         self.params = params
@@ -163,6 +163,18 @@ class SourceWalker(GenericASTTraversal, object):
         # A place to put the AST nodes for compuations pushed
         # on the evaluation stack
         self.eval_stack = []
+
+        # Initialize stack with function arguments if provided
+        if func_args:
+            # Parse the args string like "(arg1)" or "(arg1 arg2)" or "(&optional arg1)"
+            # and push each argument name onto the stack as a string
+            # Remove parens and optional/rest markers
+            args_cleaned = func_args.strip("()").replace("&optional", "").replace("&rest", "")
+            if args_cleaned.strip():
+                for arg in args_cleaned.split():
+                    arg = arg.strip()
+                    if arg:
+                        self.eval_stack.append(arg)
 
         # By default symbols will be quoted. Rules like setq and
         # call change this and set True temporarily.
@@ -363,13 +375,6 @@ class SourceWalker(GenericASTTraversal, object):
                 # FIXME: this test shouldn't be needed
                 if self.stacklen() > 0:
                     self.pop()
-        if self.stacklen() > start_stacklen:
-            val = self.access()
-            if isinstance(val, str):
-                self.write("%s" % val[1:-1])
-            elif val.kind != "VARSET":
-                self.write("%s" % val)
-            self.pop()
 
         try:
             assert start_stacklen == self.stacklen()

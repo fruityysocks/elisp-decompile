@@ -1,0 +1,32 @@
+byte code for mygcd:
+  doc:   ...
+  args: (arg1 arg2)
+0	dup	  
+1	constant  0
+2	eq	  
+3	goto-if-nil 1
+6	stack-ref 1
+7	return	  
+8:1	stack-ref 1
+9	constant  0
+10	eq	  
+11	goto-if-nil 2
+14	return	  
+15:2	stack-ref 1
+16	stack-ref 1
+17	gtr	  
+18	goto-if-nil 3
+21	constant  mygcd
+22	stack-ref 2
+23	stack-ref 2
+24	diff	  
+25	stack-ref 2
+26	call	  2
+27	return	  
+28:3	constant  mygcd
+29	stack-ref 2
+30	stack-ref 2
+31	stack-ref 4
+32	diff	  
+33	call	  2
+34	return	  

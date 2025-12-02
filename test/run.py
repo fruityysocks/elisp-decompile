@@ -2,7 +2,7 @@
 import os
 import os.path as osp
 import tempfile
-from lapdecompile.main import deparse
+from lapdecompile.__main__ import deparse
 lapdir = osp.join(osp.dirname(os.path.realpath(__file__)), "lap")
 os.chdir(lapdir)
 succeeded = 0
